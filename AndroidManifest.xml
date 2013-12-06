@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="ti.android.ble.sensortag"
+    android:versionCode="10"
+    android:versionName="1.10" >
+
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+
+    <uses-feature
+        android:name="android.hardware.bluetooth_le"
+        android:required="true" />
+
+    <uses-sdk
+        android:minSdkVersion="18"
+        android:targetSdkVersion="18" />
+    <uses-feature
+        android:name="android.hardware.bluetooth.ble"
+        android:required="true" />
+
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+
+    <application
+        android:allowBackup="false"
+        android:icon="@drawable/tible"
+        android:label="@string/app_name" 
+        android:theme="@android:style/Theme.Holo.Light">
+        <service
+            android:name="ti.android.ble.common.BluetoothLeService"
+            android:enabled="true" />
+
+        <activity
+            android:name="MainActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="DeviceActivity"
+            android:parentActivityName="MainActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="ServiceActivity"
+            android:parentActivityName="DeviceActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="FwUpdateActivity"
+            android:parentActivityName="DeviceActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="FileActivity"
+            android:parentActivityName="FwUpdateActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="PreferencesActivity"
+            android:parentActivityName="DeviceActivity"
+            android:screenOrientation="portrait"
+            android:label="Preferences"/>
+        
+    </application>
+
+
+</manifest>
