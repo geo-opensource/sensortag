@@ -35,6 +35,7 @@
 package ti.android.ble.sensortag;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
@@ -55,6 +56,7 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.content.res.XmlResourceParser;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
@@ -91,8 +93,6 @@ public class DeviceActivity extends ViewPagerActivity {
     private boolean mMagCalibrateRequest = true;
     private boolean mHeightCalibrateRequest = true;
 
-    private int aTestNum;
-
     public DeviceActivity() {
         mResourceFragmentPager = R.layout.fragment_pager;
         mResourceIdPager = R.id.pager;
@@ -108,13 +108,10 @@ public class DeviceActivity extends ViewPagerActivity {
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
 
-        // geobio testing
-        aTestNum = (int) (Math.random() * 100);
-
         // GUI
         mDeviceView = new DeviceView();
         mSectionsPagerAdapter.addSection(mDeviceView, "Services");
-        mSectionsPagerAdapter.addSection(new HelpView("help_device.html", R.layout.fragment_help, R.id.webpage), "Help");
+        mSectionsPagerAdapter.addSection(HelpView.newInstance("help_device.html", R.layout.fragment_help, R.id.webpage), "Help");
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
         // BLE
@@ -339,10 +336,21 @@ public class DeviceActivity extends ViewPagerActivity {
         }
     }
 
+    private HashSet<String> supposedToBeEnabledSensors = new HashSet<String>();
+
     private void enableSensors(boolean enable) {
+        supposedToBeEnabledSensors.clear();
         for (Sensor sensor : mEnabledSensors) {
+
+            if (sensor.getService().toString().substring(4, 6).toLowerCase().equals("aa")) {
+                Log.d("geobio", "adding service to queue " + sensor.getService().toString().substring(4, 7));
+                supposedToBeEnabledSensors.add(sensor.getService().toString().substring(4, 7));
+            }
+
             UUID servUuid = sensor.getService();
             UUID confUuid = sensor.getConfig();
+
+            Log.d("geobio", "dev act " + (enable ? "enable" : "disable") + (confUuid != null ? confUuid : servUuid).toString().substring(4, 8));
 
             // Skip keys 
             if (confUuid == null) {
@@ -361,7 +369,29 @@ public class DeviceActivity extends ViewPagerActivity {
             mBtLeService.waitIdle(GATT_TIMEOUT);
         }
 
+        Log.d("geobio", "enabling sensor, adding post delayed to verify or re-enabled");
+
+        h.postDelayed(enabler, 1000);
     }
+
+    Handler h = new Handler();
+
+    Runnable enabler = new Runnable() {
+
+        @Override
+        public void run() {
+            if (!supposedToBeEnabledSensors.isEmpty()) {
+                enableNotifications(true);
+                enableSensors(true);
+
+                Log.d("geobio", "enabling sensors");
+                h.postDelayed(enabler, 1000);
+
+            } else {
+                Log.d("geobio", "all sensors seem to be enabled, stoping handler runnable");
+            }
+        }
+    };
 
     private void enableNotifications(boolean enable) {
         for (Sensor sensor : mEnabledSensors) {
@@ -458,15 +488,34 @@ public class DeviceActivity extends ViewPagerActivity {
                 byte[] value = intent.getByteArrayExtra(BluetoothLeService.EXTRA_DATA);
                 String uuidStr = intent.getStringExtra(BluetoothLeService.EXTRA_UUID);
                 onCharacteristicChanged(uuidStr, value);
+
+                if (uuidStr.substring(4, 7).toLowerCase().equals("aa4")) {
+                    int baroValue = (int) (Sensor.BAROMETER.convert(value).x / 100); // approx 1000
+                    Log.d("geobio", "received aa4, barometer " + baroValue + (baroValue > 100 ? "removing" : "not removing..."));
+                    if (baroValue > 100) {
+                        supposedToBeEnabledSensors.remove(uuidStr.substring(4, 7));
+                    }
+                } else {
+
+                    if (supposedToBeEnabledSensors.remove(uuidStr.substring(4, 7))) {
+                        Log.d("geobio", "on notify, received so removing " + uuidStr.substring(4, 7));
+                    }
+                }
+
+                // Log.d("geobio", uuidStr.toString().substring(4, 8) + " oncharNOTIFY " + status);
             } else if (BluetoothLeService.ACTION_DATA_WRITE.equals(action)) {
                 // Data written
                 String uuidStr = intent.getStringExtra(BluetoothLeService.EXTRA_UUID);
                 onCharacteristicWrite(uuidStr, status);
+
+                Log.d("geobio", uuidStr.toString().substring(4, 8) + " oncharWR " + status);
             } else if (BluetoothLeService.ACTION_DATA_READ.equals(action)) {
                 // Data read
                 String uuidStr = intent.getStringExtra(BluetoothLeService.EXTRA_UUID);
                 byte[] value = intent.getByteArrayExtra(BluetoothLeService.EXTRA_DATA);
                 onCharacteristicsRead(uuidStr, value, status);
+
+                Log.d("geobio", uuidStr.toString().substring(4, 8) + " oncharREAD " + status);
             }
 
             if (status != BluetoothGatt.GATT_SUCCESS) {
@@ -504,6 +553,14 @@ public class DeviceActivity extends ViewPagerActivity {
             }
 
             mDeviceView.onCharacteristicChanged(uuidStr, value);
+
+            if (uuidStr.toLowerCase().contains("ffe") && value.length > 0 && value[ 0 ] == 2) {
+                Log.d("geobio", "pressed left button, enabling everything again");
+                enableNotifications(true);
+                enableSensors(true);
+
+                // this fixes the issue where some sensors are disabled even tho they're supposed to be enabled
+            }
         }
     }
 

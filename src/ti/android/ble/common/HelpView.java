@@ -42,24 +42,40 @@ import android.view.ViewGroup;
 import android.webkit.WebView;
 
 public class HelpView extends Fragment {
-  private String mFile = "about.html";
-  private int mIdFragment;
-  private int mIdWebPage;
+    private String mFile = "about.html";
+    private int mIdFragment;
+    private int mIdWebPage;
 
-  public HelpView(String file, int idFragment, int idWebPage) {
-    if (file != null)
-      mFile = file;
-    mIdFragment = idFragment;
-    mIdWebPage = idWebPage;
-  }
+    private static final String KEY_FILE = "file";
+    private static final String KEY_LAYOUT_RES = "frag_lay";
+    private static final String KEY_WEB_PAGE = "id_web";
 
-  @Override
-  public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-    View rootView = inflater.inflate(mIdFragment, container, false);
-    WebView wv = (WebView) rootView.findViewById(mIdWebPage);
+    public static HelpView newInstance(String file, int idFragment, int idWebpage) {
+        HelpView f = new HelpView();
+        Bundle bundle = new Bundle();
+        bundle.putString(KEY_FILE, file);
+        bundle.putInt(KEY_LAYOUT_RES, idFragment);
+        bundle.putInt(KEY_WEB_PAGE, idWebpage);
+        f.setArguments(bundle);
+        return f;
+    }
 
-    wv.loadUrl("file:///android_asset/" + mFile);
-    return rootView;
-  }
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        mFile = getArguments().getString(KEY_FILE);
+        mIdFragment = getArguments().getInt(KEY_LAYOUT_RES);
+        mIdWebPage = getArguments().getInt(KEY_WEB_PAGE);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View rootView = inflater.inflate(mIdFragment, container, false);
+        WebView wv = (WebView) rootView.findViewById(mIdWebPage);
+
+        wv.loadUrl("file:///android_asset/" + mFile);
+        return rootView;
+    }
 
 }

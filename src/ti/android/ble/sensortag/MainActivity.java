@@ -141,7 +141,7 @@ public class MainActivity extends ViewPagerActivity {
         // Create the fragments and add them to the view pager and tabs
         mScanView = new ScanView();
         mSectionsPagerAdapter.addSection(mScanView, "BLE Device List");
-        mSectionsPagerAdapter.addSection(new HelpView("help_scan.html", R.layout.fragment_help, R.id.webpage), "Help");
+        mSectionsPagerAdapter.addSection(HelpView.newInstance("help_scan.html", R.layout.fragment_help, R.id.webpage), "Help");
 
         // Register the BroadcastReceiver
         mFilter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
