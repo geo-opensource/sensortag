@@ -93,6 +93,8 @@ public class DeviceActivity extends ViewPagerActivity {
     private boolean mMagCalibrateRequest = true;
     private boolean mHeightCalibrateRequest = true;
 
+    private static final boolean DEBUG = false;
+
     public DeviceActivity() {
         mResourceFragmentPager = R.layout.fragment_pager;
         mResourceIdPager = R.id.pager;
@@ -516,7 +518,10 @@ public class DeviceActivity extends ViewPagerActivity {
     };
 
     private void onCharacteristicWrite(String uuidStr, int status) {
-        Log.d(TAG, "onCharacteristicWrite: " + uuidStr);
+
+        if (DEBUG) {
+            Log.d(TAG, "onCharacteristicWrite: " + uuidStr);
+        }
     }
 
     private void onCharacteristicChanged(String uuidStr, byte[] value) {
@@ -552,7 +557,10 @@ public class DeviceActivity extends ViewPagerActivity {
     }
 
     private void onCharacteristicsRead(String uuidStr, byte[] value, int status) {
-        Log.i(TAG, "onCharacteristicsRead: " + uuidStr);
+
+        if (DEBUG) {
+            Log.i(TAG, "onCharacteristicsRead: " + uuidStr);
+        }
         if (uuidStr.equals(SensorTag.UUID_BAR_CALI.toString())) {
             Log.i(TAG, "CALIBRATED");
             // Barometer calibration values are read.
