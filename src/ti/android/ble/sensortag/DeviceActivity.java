@@ -176,6 +176,8 @@ public class DeviceActivity extends ViewPagerActivity {
             registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
             mIsReceiving = true;
         }
+
+        h.postDelayed(enabler, 3000);
     }
 
     @Override
@@ -371,7 +373,8 @@ public class DeviceActivity extends ViewPagerActivity {
 
         Log.d("geobio", "enabling sensor, adding post delayed to verify or re-enabled");
 
-        h.postDelayed(enabler, 1000);
+        // the enabler is added on resume so that it doesn't run while in the pref act
+
     }
 
     Handler h = new Handler();
@@ -385,8 +388,7 @@ public class DeviceActivity extends ViewPagerActivity {
                 enableSensors(true);
 
                 Log.d("geobio", "enabling sensors");
-                h.postDelayed(enabler, 1000);
-
+                h.postDelayed(enabler, 3000);
             } else {
                 Log.d("geobio", "all sensors seem to be enabled, stoping handler runnable");
             }
@@ -491,10 +493,14 @@ public class DeviceActivity extends ViewPagerActivity {
 
                 if (uuidStr.substring(4, 7).toLowerCase().equals("aa4")) {
                     int baroValue = (int) (Sensor.BAROMETER.convert(value).x / 100); // approx 1000
-                    Log.d("geobio", "received aa4, barometer " + baroValue + (baroValue > 100 ? "removing" : "not removing..."));
-                    if (baroValue > 100) {
-                        supposedToBeEnabledSensors.remove(uuidStr.substring(4, 7));
+                    if (supposedToBeEnabledSensors.contains("aa4")) {
+                        // then need to remove
+                        Log.d("geobio", "received aa4, barometer " + baroValue + (baroValue > 100 ? "removing" : "not removing..."));
+                        if (baroValue > 100) {
+                            supposedToBeEnabledSensors.remove(uuidStr.substring(4, 7));
+                        }
                     }
+
                 } else {
 
                     if (supposedToBeEnabledSensors.remove(uuidStr.substring(4, 7))) {
@@ -545,16 +551,21 @@ public class DeviceActivity extends ViewPagerActivity {
                 if (uuidStr.equals(SensorTag.UUID_BAR_DATA.toString())) {
                     Point3D v = Sensor.BAROMETER.convert(value);
 
-                    BarometerCalibrationCoefficients.INSTANCE.heightCalibration = v.x;
-                    mHeightCalibrateRequest = false;
-                    Toast.makeText(this, "Height measurement calibrated", Toast.LENGTH_SHORT)
-                            .show();
+                    if ((int) (v.x / 100) > 100) { // don't calibrate if less than 100 hPA. expected value should be around 1000
+
+                        BarometerCalibrationCoefficients.INSTANCE.heightCalibration = v.x;
+                        mHeightCalibrateRequest = false;
+                        Toast.makeText(this, "Height measurement calibrated", Toast.LENGTH_SHORT)
+                                .show();
+                    }
                 }
             }
 
             mDeviceView.onCharacteristicChanged(uuidStr, value);
 
-            if (uuidStr.toLowerCase().contains("ffe") && value.length > 0 && value[ 0 ] == 2) {
+            boolean enableSensorsWhenPressLeftButton = false;
+
+            if (enableSensorsWhenPressLeftButton && uuidStr.toLowerCase().contains("ffe") && value.length > 0 && value[ 0 ] == 2) {
                 Log.d("geobio", "pressed left button, enabling everything again");
                 enableNotifications(true);
                 enableSensors(true);

@@ -51,7 +51,7 @@
     <string name="empty1">*\n</string>
     <string name="unitDeg">deg/C\n</string>
     <string name="unitRH">%rH\n</string>
-    <string name="unitPA_Meter">nPA\nmeter</string>
+    <string name="unitPA_Meter">hPA\nmeter</string>
 
     <!-- FWUpdate activity -->
     <string name="title_oad">Firmware update (OAD)</string>
