@@ -3,12 +3,5 @@
     <item
         android:id="@+id/opt_prefs"
         android:title="@string/prefs"/>
-    
-    <item
-        android:id="@+id/opt_fwupdate"
-        android:title="@string/fwupdate"/>
-    <item
-        android:id="@+id/opt_about"
-        android:title="@string/about"/>
 
 </menu>

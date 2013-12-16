@@ -42,7 +42,6 @@ import ti.android.ble.common.BluetoothLeService;
 import ti.android.ble.common.HelpView;
 import ti.android.util.CustomToast;
 import android.app.Activity;
-import android.app.Dialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
@@ -55,7 +54,6 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
@@ -69,10 +67,6 @@ import android.widget.Toast;
 public class MainActivity extends ViewPagerActivity {
     // Log
     private static final String TAG = "MainActivity";
-
-    // URLs
-    private static final Uri URL_FORUM = Uri.parse("http://e2e.ti.com/support/low_power_rf/default.aspx?DCMP=hpa_hpa_community&HQS=NotApplicable+OT+lprf-forum");
-    private static final Uri URL_STHOME = Uri.parse("http://www.ti.com/ww/en/wireless_connectivity/sensortag/index.shtml?INTC=SensorTag&HQS=sensortag");
 
     // Requests to other activities
     private static final int REQ_ENABLE_BT = 0;
@@ -180,37 +174,15 @@ public class MainActivity extends ViewPagerActivity {
             case R.id.opt_bt:
                 onBluetooth();
                 break;
-            case R.id.opt_e2e:
-                onUrl(URL_FORUM);
-                break;
-            case R.id.opt_sthome:
-                onUrl(URL_STHOME);
-                break;
-            case R.id.opt_about:
-                onAbout();
-                break;
-            case R.id.opt_exit:
-                finish();
-                break;
             default:
                 return super.onOptionsItemSelected(item);
         }
         return true;
     }
 
-    private void onUrl(Uri uri) {
-        Intent web = new Intent(Intent.ACTION_VIEW, uri);
-        startActivity(web);
-    }
-
     private void onBluetooth() {
         Intent settingsIntent = new Intent(android.provider.Settings.ACTION_BLUETOOTH_SETTINGS);
         startActivity(settingsIntent);
-    }
-
-    private void onAbout() {
-        final Dialog dialog = new AboutDialog(this);
-        dialog.show();
     }
 
     public void onScanViewReady(View view) {

@@ -40,18 +40,6 @@
             android:parentActivityName="MainActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="ServiceActivity"
-            android:parentActivityName="DeviceActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name="FwUpdateActivity"
-            android:parentActivityName="DeviceActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name="FileActivity"
-            android:parentActivityName="FwUpdateActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name="PreferencesActivity"
             android:label="Preferences"
             android:parentActivityName="DeviceActivity"

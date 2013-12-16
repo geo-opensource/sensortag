@@ -157,12 +157,6 @@ public class DeviceActivity extends ViewPagerActivity {
             case R.id.opt_prefs:
                 startPrefrenceActivity();
                 break;
-            case R.id.opt_fwupdate:
-                startOadActivity();
-                break;
-            case R.id.opt_about:
-                openAboutDialog();
-                break;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -257,19 +251,6 @@ public class DeviceActivity extends ViewPagerActivity {
 
     BluetoothGattService getConnControlService() {
         return mConnControlService;
-    }
-
-    private void startOadActivity() {
-        if (mOadService != null && mConnControlService != null) {
-            // Launch OAD
-            enableSensors(false);
-            enableNotifications(false);
-            Toast.makeText(this, "OAD service available", Toast.LENGTH_LONG).show();
-            final Intent i = new Intent(this, FwUpdateActivity.class);
-            startActivityForResult(i, FWUPDATE_ACT_REQ);
-        } else {
-            Toast.makeText(this, "OAD service not available on this device", Toast.LENGTH_LONG).show();
-        }
     }
 
     private void startPrefrenceActivity() {
