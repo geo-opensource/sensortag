@@ -36,19 +36,29 @@ package ti.android.ble.sensortag;
 
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
+import android.view.MenuItem;
 import android.widget.ImageView;
 
 public class PreferencesActivity extends PreferenceActivity {
-  @SuppressWarnings("unused")
-  private static final String TAG = "PreferencesActivity";
+    @SuppressWarnings("unused")
+    private static final String TAG = "PreferencesActivity";
 
-  @Override
-  protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    // Icon padding
-    ImageView view = (ImageView) findViewById(android.R.id.home);
-    view.setPadding(10, 0, 20, 10);
-    
-  }
-  
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // Icon padding
+        ImageView view = (ImageView) findViewById(android.R.id.home);
+        view.setPadding(10, 0, 20, 10);
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 }
