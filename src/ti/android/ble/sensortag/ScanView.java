@@ -145,11 +145,12 @@ public class ScanView extends Fragment {
 
                     @Override
                     public void run() {
-                        if (mActivity.getDeviceInfoList().size() == 1) {
+                        if (AUTO_JOIN && mActivity.getDeviceInfoList().size() == 1) { // need to double check else its called mulitple times
                             // if 1 second later, still only 1 device, then auto join
                             try {
-                                mDeviceClickListener.onItemClick(null, null, 0, 0);
                                 AUTO_JOIN = false; // only auto join once
+                                mDeviceClickListener.onItemClick(null, null, 0, 0);
+                                Toast.makeText(getActivity(), "Auto-connecting to only SensorTag available", Toast.LENGTH_SHORT).show();
                             } catch (Exception e) {
                                 AUTO_JOIN = false;
                                 Toast.makeText(getActivity(), "Exception when trying to auto connect to SensorTag", Toast.LENGTH_SHORT).show();

@@ -190,6 +190,8 @@ public class DeviceActivity extends ViewPagerActivity {
             unregisterReceiver(mGattUpdateReceiver);
             mIsReceiving = false;
         }
+
+        h.removeCallbacks(enabler);
     }
 
     @Override
