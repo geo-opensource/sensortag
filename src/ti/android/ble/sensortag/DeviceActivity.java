@@ -345,14 +345,11 @@ public class DeviceActivity extends ViewPagerActivity {
         for (Sensor sensor : mEnabledSensors) {
 
             if (sensor.getService().toString().substring(4, 6).toLowerCase().equals("aa")) {
-                Log.d("geobio", "adding service to queue " + sensor.getService().toString().substring(4, 7));
                 supposedToBeEnabledSensors.add(sensor.getService().toString().substring(4, 7));
             }
 
             UUID servUuid = sensor.getService();
             UUID confUuid = sensor.getConfig();
-
-            Log.d("geobio", "dev act " + (enable ? "enable" : "disable") + (confUuid != null ? confUuid : servUuid).toString().substring(4, 8));
 
             // Skip keys 
             if (confUuid == null) {
@@ -371,10 +368,6 @@ public class DeviceActivity extends ViewPagerActivity {
             mBtLeService.waitIdle(GATT_TIMEOUT);
         }
 
-        Log.d("geobio", "enabling sensor, adding post delayed to verify or re-enabled");
-
-        // the enabler is added on resume so that it doesn't run while in the pref act
-
     }
 
     Handler h = new Handler();
@@ -387,10 +380,10 @@ public class DeviceActivity extends ViewPagerActivity {
                 enableNotifications(true);
                 enableSensors(true);
 
-                Log.d("geobio", "enabling sensors");
+                Log.d(TAG, "Not all sensors seem to be active, trying to enable again");
                 h.postDelayed(enabler, 3000);
             } else {
-                Log.d("geobio", "all sensors seem to be enabled, stoping handler runnable");
+                Log.d(TAG, "All sensors seem to be enabled, stoping the looping sensor enabler");
             }
         }
     };
@@ -495,7 +488,6 @@ public class DeviceActivity extends ViewPagerActivity {
                     int baroValue = (int) (Sensor.BAROMETER.convert(value).x / 100); // approx 1000
                     if (supposedToBeEnabledSensors.contains("aa4")) {
                         // then need to remove
-                        Log.d("geobio", "received aa4, barometer " + baroValue + (baroValue > 100 ? "removing" : "not removing..."));
                         if (baroValue > 100) {
                             supposedToBeEnabledSensors.remove(uuidStr.substring(4, 7));
                         }
@@ -503,25 +495,18 @@ public class DeviceActivity extends ViewPagerActivity {
 
                 } else {
 
-                    if (supposedToBeEnabledSensors.remove(uuidStr.substring(4, 7))) {
-                        Log.d("geobio", "on notify, received so removing " + uuidStr.substring(4, 7));
-                    }
-                }
+                    supposedToBeEnabledSensors.remove(uuidStr.substring(4, 7));
 
-                // Log.d("geobio", uuidStr.toString().substring(4, 8) + " oncharNOTIFY " + status);
+                }
             } else if (BluetoothLeService.ACTION_DATA_WRITE.equals(action)) {
                 // Data written
                 String uuidStr = intent.getStringExtra(BluetoothLeService.EXTRA_UUID);
                 onCharacteristicWrite(uuidStr, status);
-
-                Log.d("geobio", uuidStr.toString().substring(4, 8) + " oncharWR " + status);
             } else if (BluetoothLeService.ACTION_DATA_READ.equals(action)) {
                 // Data read
                 String uuidStr = intent.getStringExtra(BluetoothLeService.EXTRA_UUID);
                 byte[] value = intent.getByteArrayExtra(BluetoothLeService.EXTRA_DATA);
                 onCharacteristicsRead(uuidStr, value, status);
-
-                Log.d("geobio", uuidStr.toString().substring(4, 8) + " oncharREAD " + status);
             }
 
             if (status != BluetoothGatt.GATT_SUCCESS) {
@@ -563,15 +548,6 @@ public class DeviceActivity extends ViewPagerActivity {
 
             mDeviceView.onCharacteristicChanged(uuidStr, value);
 
-            boolean enableSensorsWhenPressLeftButton = false;
-
-            if (enableSensorsWhenPressLeftButton && uuidStr.toLowerCase().contains("ffe") && value.length > 0 && value[ 0 ] == 2) {
-                Log.d("geobio", "pressed left button, enabling everything again");
-                enableNotifications(true);
-                enableSensors(true);
-
-                // this fixes the issue where some sensors are disabled even tho they're supposed to be enabled
-            }
         }
     }
 

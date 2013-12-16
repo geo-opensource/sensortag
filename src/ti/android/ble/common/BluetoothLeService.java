@@ -341,8 +341,6 @@ public class BluetoothLeService extends Service {
      *          If true, enable notification. False otherwise.
      */
     public boolean setCharacteristicNotification(BluetoothGattCharacteristic characteristic, boolean enable) {
-        Log.d("geobio", "blue le ser, set char notif: " + characteristic.getUuid().toString().substring(4, 8) + " " + enable);
-
         if (!checkGatt()) {
             return false;
         }
