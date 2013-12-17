@@ -42,8 +42,7 @@ import java.util.UUID;
 
 import ti.android.ble.common.BluetoothLeService;
 import ti.android.ble.common.GattInfo;
-import ti.android.ble.common.HelpView;
-import ti.android.util.Point3D;
+import android.app.Activity;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCharacteristic;
@@ -53,20 +52,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
-import android.content.res.XmlResourceParser;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.Toast;
 
-public class DeviceActivity extends ViewPagerActivity {
+public class DeviceActivity extends Activity {
     // Log
     private static String TAG = "DeviceActivity";
 
@@ -74,8 +70,6 @@ public class DeviceActivity extends ViewPagerActivity {
     public static final String EXTRA_DEVICE = "EXTRA_DEVICE";
     private static final int PREF_ACT_REQ = 0;
     private static final int FWUPDATE_ACT_REQ = 1;
-
-    private DeviceView mDeviceView = null;
 
     // BLE
     private BluetoothLeService mBtLeService = null;
@@ -90,18 +84,9 @@ public class DeviceActivity extends ViewPagerActivity {
     private List<Sensor> mEnabledSensors = new ArrayList<Sensor>();
     private BluetoothGattService mOadService = null;
     private BluetoothGattService mConnControlService = null;
-    private boolean mMagCalibrateRequest = true;
-    private boolean mHeightCalibrateRequest = true;
-
-    private static final boolean DEBUG = false;
 
     public DeviceActivity() {
-        mResourceFragmentPager = R.layout.fragment_pager;
-        mResourceIdPager = R.id.pager;
-    }
-
-    public static DeviceActivity getInstance() {
-        return (DeviceActivity) mThis;
+        // TODO it can't actually start since there's no layout!
     }
 
     @Override
@@ -110,26 +95,13 @@ public class DeviceActivity extends ViewPagerActivity {
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
 
-        // GUI
-        mDeviceView = new DeviceView();
-        mSectionsPagerAdapter.addSection(mDeviceView, "Services");
-        mSectionsPagerAdapter.addSection(HelpView.newInstance("help_device.html", R.layout.fragment_help, R.id.webpage), "Help");
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+        // turns everything off when this starts but is this just the visuals? or on device too
 
         // BLE
         mBtLeService = BluetoothLeService.getInstance();
         mBluetoothDevice = intent.getParcelableExtra(EXTRA_DEVICE);
         mServiceList = new ArrayList<BluetoothGattService>();
-
-        if (savedInstanceState != null && mBluetoothDevice == null) {
-            // when returning from preferences activity (PreferencesFragment), the bluetooth device is lost
-            mBluetoothDevice = savedInstanceState.getParcelable(EXTRA_DEVICE);
-        }
-
-        // GATT database
-        Resources res = getResources();
-        XmlResourceParser xpp = res.getXml(R.xml.gatt_uuid);
-        new GattInfo(xpp);
 
         // Initialize sensor list
         updateSensorList();
@@ -148,19 +120,6 @@ public class DeviceActivity extends ViewPagerActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.device_activity_actions, menu);
         return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle presses on the action bar items
-        switch (item.getItemId()) {
-            case R.id.opt_prefs:
-                startPrefrenceActivity();
-                break;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-        return true;
     }
 
     @Override
@@ -186,12 +145,6 @@ public class DeviceActivity extends ViewPagerActivity {
         }
 
         h.removeCallbacks(enabler);
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putParcelable(EXTRA_DEVICE, mBluetoothDevice);
     }
 
     private static IntentFilter makeGattUpdateIntentFilter() {
@@ -283,11 +236,7 @@ public class DeviceActivity extends ViewPagerActivity {
 
     private void discoverServices() {
         if (mBtGatt.discoverServices()) {
-            Log.i(TAG, "START SERVICE DISCOVERY");
             mServiceList.clear();
-            setStatus("Service discovery started");
-        } else {
-            setError("Service discovery start failed");
         }
     }
 
@@ -303,23 +252,8 @@ public class DeviceActivity extends ViewPagerActivity {
 
         // Characteristics descriptor readout done
         if (mServicesRdy) {
-            setStatus("Service discovery complete");
             enableSensors(true);
             enableNotifications(true);
-        } else {
-            setError("Failed to read services");
-        }
-    }
-
-    private void setError(String txt) {
-        if (mDeviceView != null) {
-            mDeviceView.setError(txt);
-        }
-    }
-
-    private void setStatus(String txt) {
-        if (mDeviceView != null) {
-            mDeviceView.setStatus(txt);
         }
     }
 
@@ -407,19 +341,6 @@ public class DeviceActivity extends ViewPagerActivity {
         mBtLeService.waitIdle(GATT_TIMEOUT);
     }
 
-    void calibrateMagnetometer() {
-        Log.d(TAG, "calibrateMagnetometer");
-        MagnetometerCalibrationCoefficients.INSTANCE.val.x = 0.0;
-        MagnetometerCalibrationCoefficients.INSTANCE.val.y = 0.0;
-        MagnetometerCalibrationCoefficients.INSTANCE.val.z = 0.0;
-
-        mMagCalibrateRequest = true;
-    }
-
-    void calibrateHeight() {
-        mHeightCalibrateRequest = true;
-    }
-
     // Activity result handling
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -427,7 +348,6 @@ public class DeviceActivity extends ViewPagerActivity {
 
         switch (requestCode) {
             case PREF_ACT_REQ:
-                mDeviceView.updateVisibility();
                 Toast.makeText(this, "Applying preferences", Toast.LENGTH_SHORT).show();
                 if (!mIsReceiving) {
                     mIsReceiving = true;
@@ -435,11 +355,6 @@ public class DeviceActivity extends ViewPagerActivity {
                 }
 
                 updateSensorList();
-                enableSensors(true);
-                enableNotifications(true);
-                break;
-            case FWUPDATE_ACT_REQ:
-                // FW update cancelled so resume
                 enableSensors(true);
                 enableNotifications(true);
                 break;
@@ -467,7 +382,6 @@ public class DeviceActivity extends ViewPagerActivity {
                 // Notification
                 byte[] value = intent.getByteArrayExtra(BluetoothLeService.EXTRA_DATA);
                 String uuidStr = intent.getStringExtra(BluetoothLeService.EXTRA_UUID);
-                onCharacteristicChanged(uuidStr, value);
 
                 if (uuidStr.substring(4, 7).toLowerCase().equals("aa4")) {
                     int baroValue = (int) (Sensor.BAROMETER.convert(value).x / 100); // approx 1000
@@ -483,85 +397,9 @@ public class DeviceActivity extends ViewPagerActivity {
                     supposedToBeEnabledSensors.remove(uuidStr.substring(4, 7));
 
                 }
-            } else if (BluetoothLeService.ACTION_DATA_WRITE.equals(action)) {
-                // Data written
-                String uuidStr = intent.getStringExtra(BluetoothLeService.EXTRA_UUID);
-                onCharacteristicWrite(uuidStr, status);
-            } else if (BluetoothLeService.ACTION_DATA_READ.equals(action)) {
-                // Data read
-                String uuidStr = intent.getStringExtra(BluetoothLeService.EXTRA_UUID);
-                byte[] value = intent.getByteArrayExtra(BluetoothLeService.EXTRA_DATA);
-                onCharacteristicsRead(uuidStr, value, status);
             }
 
-            if (status != BluetoothGatt.GATT_SUCCESS) {
-                setError("GATT error code: " + status);
-            }
         }
     };
-
-    private void onCharacteristicWrite(String uuidStr, int status) {
-
-        if (DEBUG) {
-            Log.d(TAG, "onCharacteristicWrite: " + uuidStr);
-        }
-    }
-
-    private void onCharacteristicChanged(String uuidStr, byte[] value) {
-        if (mDeviceView != null) {
-            if (mMagCalibrateRequest) {
-                if (uuidStr.equals(SensorTag.UUID_MAG_DATA.toString())) {
-                    Point3D v = Sensor.MAGNETOMETER.convert(value);
-
-                    MagnetometerCalibrationCoefficients.INSTANCE.val = v;
-                    mMagCalibrateRequest = false;
-                    Toast.makeText(this, "Magnetometer calibrated", Toast.LENGTH_SHORT)
-                            .show();
-                }
-            }
-
-            if (mHeightCalibrateRequest) {
-                if (uuidStr.equals(SensorTag.UUID_BAR_DATA.toString())) {
-                    Point3D v = Sensor.BAROMETER.convert(value);
-
-                    if ((int) (v.x / 100) > 100) { // don't calibrate if less than 100 hPA. expected value should be around 1000
-
-                        BarometerCalibrationCoefficients.INSTANCE.heightCalibration = v.x;
-                        mHeightCalibrateRequest = false;
-                        Toast.makeText(this, "Height measurement calibrated", Toast.LENGTH_SHORT)
-                                .show();
-                    }
-                }
-            }
-
-            mDeviceView.onCharacteristicChanged(uuidStr, value);
-
-        }
-    }
-
-    private void onCharacteristicsRead(String uuidStr, byte[] value, int status) {
-
-        if (DEBUG) {
-            Log.i(TAG, "onCharacteristicsRead: " + uuidStr);
-        }
-        if (uuidStr.equals(SensorTag.UUID_BAR_CALI.toString())) {
-            Log.i(TAG, "CALIBRATED");
-            // Barometer calibration values are read.
-            List<Integer> cal = new ArrayList<Integer>();
-            for (int offset = 0; offset < 8; offset += 2) {
-                Integer lowerByte = value[ offset ] & 0xFF;
-                Integer upperByte = value[ offset + 1 ] & 0xFF;
-                cal.add((upperByte << 8) + lowerByte);
-            }
-
-            for (int offset = 8; offset < 16; offset += 2) {
-                Integer lowerByte = value[ offset ] & 0xFF;
-                Integer upperByte = (int) value[ offset + 1 ];
-                cal.add((upperByte << 8) + lowerByte);
-            }
-
-            BarometerCalibrationCoefficients.INSTANCE.barometerCalibrationCoefficients = cal;
-        }
-    }
 
 }
