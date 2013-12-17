@@ -5,6 +5,7 @@ import java.util.UUID;
 import ti.android.ble.common.BluetoothLeService;
 import ti.android.ble.sensortag.R;
 import ti.android.ble.sensortag.Sensor;
+import ti.android.util.Point3D;
 import android.app.IntentService;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -19,6 +20,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
+import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
@@ -48,14 +50,19 @@ public class TipOverIntentService extends IntentService {
 
             startBluetoothLeService();
 
-            mBtLeService = BluetoothLeService.getInstance(); // TODO maybe need a callback to init these!
-
-            mBtGatt = BluetoothLeService.getBtGatt();
-
-            registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
-
-            mIsRunning = true;
+            // after started then continueRunning();
         }
+    }
+
+    private void continueRunning() {
+        mBtLeService = BluetoothLeService.getInstance(); // TODO maybe need a callback to init these!
+
+        mBtGatt = BluetoothLeService.getBtGatt();
+        mBtGatt.discoverServices();
+
+        registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
+
+        mIsRunning = true;
     }
 
     private boolean checkForBluetoothLe() {
@@ -124,6 +131,7 @@ public class TipOverIntentService extends IntentService {
     };
 
     private void connect() {
+        scanLeDevice(false);
 
         Log.d("geobio", "tip connect");
         int connState = mBluetoothManager.getConnectionState(mBluetoothDevice, BluetoothGatt.GATT);
@@ -134,12 +142,33 @@ public class TipOverIntentService extends IntentService {
                 break;
             case BluetoothGatt.STATE_DISCONNECTED:
                 mBluetoothLeService.connect(mBluetoothDevice.getAddress());
+                Log.d("geobio", "connecting and starting enabler...");
+                handler.postDelayed(enabler, 1000);
                 break;
             default:
                 break;
         }
 
     }
+
+    private boolean receivedAllerometerData = false;
+
+    private Handler handler = new Handler();
+
+    private Runnable enabler = new Runnable() {
+
+        @Override
+        public void run() {
+            if (!receivedAllerometerData) {
+                enableSensors(true);
+                enableNotifications(true);
+
+                handler.postDelayed(this, 3000);
+            } else {
+                Log.d("geobio", "enabler finishing, received data");
+            }
+        }
+    };
 
     /* **************************************** */
 
@@ -195,9 +224,19 @@ public class TipOverIntentService extends IntentService {
 
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder service) {
-            Log.d("geobio", "tip service connected connected");
+
             mBluetoothLeService = ((BluetoothLeService.LocalBinder) service).getService();
             mBluetoothLeService.initialize();
+
+            new Handler().postDelayed(new Runnable() {
+
+                @Override
+                public void run() {
+                    continueRunning();
+                }
+            }, 2000);
+
+            Log.d("geobio", "tip service connected connected");
             scanLeDevice(true);
 
         }
@@ -222,6 +261,10 @@ public class TipOverIntentService extends IntentService {
     }
 
     private void enableSensors(boolean enable) {
+        if (mBtGatt == null || mBtLeService == null || mBtGatt.getServices().size() < 1) {
+            return;
+        }
+
         Sensor sensor = Sensor.ACCELEROMETER; // the only sensor I want
 
         UUID servUuid = sensor.getService();
@@ -236,6 +279,10 @@ public class TipOverIntentService extends IntentService {
     }
 
     private void enableNotifications(boolean enable) {
+        if (mBtGatt == null || mBtLeService == null || mBtGatt.getServices().size() < 1) {
+            return;
+        }
+
         Sensor sensor = Sensor.ACCELEROMETER;
         UUID servUuid = sensor.getService();
         UUID dataUuid = sensor.getData();
@@ -247,10 +294,21 @@ public class TipOverIntentService extends IntentService {
 
     }
 
+    private double[] lastFiveX = new double[ 5 ];
+    int lastIndex = 0;
+
+    private double average() {
+        double sum = 0;
+        for (double val : lastFiveX) {
+            sum += val;
+        }
+        return sum / lastFiveX.length;
+    }
+
     private final BroadcastReceiver mGattUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.d("geobio", "tip ** broadcasts receiver received!");
+
             final String action = intent.getAction();
             int status = intent.getIntExtra(BluetoothLeService.EXTRA_STATUS, BluetoothGatt.GATT_SUCCESS);
 
@@ -259,17 +317,22 @@ public class TipOverIntentService extends IntentService {
                 byte[] value = intent.getByteArrayExtra(BluetoothLeService.EXTRA_DATA);
                 String uuidStr = intent.getStringExtra(BluetoothLeService.EXTRA_UUID);
 
-                if (uuidStr.substring(4, 7).toLowerCase().equals("aa4")) {
-                    int baroValue = (int) (Sensor.BAROMETER.convert(value).x / 100); // approx 1000
-                    //                    if (supposedToBeEnabledSensors.contains("aa4")) {
-                    //                        // then need to remove
-                    //                        if (baroValue > 100) {
-                    //                            supposedToBeEnabledSensors.remove(uuidStr.substring(4, 7));
-                    //                        }
-                    //                    }
+                if (uuidStr.substring(4, 7).toLowerCase().equals("aa1")) { // allero
+                    receivedAllerometerData = true;
 
+                    Point3D result = Sensor.ACCELEROMETER.convert(value);
+                    Log.d("geobio", "accelerometer, x: " + result.x + ", y: " + result.y + ", z: " + result.z);
+
+                    lastFiveX[ lastIndex++ % lastFiveX.length ] = Math.abs(result.x);
+
+                    if (average() > 0.7) {
+                        Log.e("geobio", "tip over!!! :(");
+                    }
+                    return;
                 }
             }
+
+            Log.d("geobio", "tip broadcasts receiver received something other than accelero");
 
         }
     };
