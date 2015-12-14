@@ -1,0 +1,31 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- *********************************************************
+**   File    : help_device.html
+**   Descr.  : Help for device view
+**** ****************************************************** -->
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta HTTP-EQUIV="Pragma" CONTENT="no-cache" />
+<meta HTTP-EQUIV="Cache-Control" CONTENT="no-cache" />
+<meta HTTP-EQUIV="expires" CONTENT="0">
+<meta name="Author" content="Texas Instruments" />
+<title>BLE Device Monitor</title>
+<link rel="stylesheet" type="text/css" href="help.css">
+</head>
+
+<body>
+                <div class="main">
+                                <h1>Sensor View Help</h1>
+                                <p>When the view is started a <b>Service Discovery</b> is initiated. On <b>Service Discovery</b> completion (may take a few seconds), sensor images appear and data is displayed next to them. To configure the sensors, tap the sensor to configure and an on/off button and period slider will appear, tap the sensor again to exit configuration menu.</p>
+                                <p>
+                                On Android 4.3 devices there is a limitation of maximum 4 continuous notifications, Android 4.4 devices does not have this limitation and is able to handle a maximum of 7 continuous notifications. The application will automatically enable 4 notifications on Android 4.3, the sensors not enabled will be grayed out. To enable them, first tap on a sensor which is enabled and then disable it, thereafter tap on the sensor you want to enable and use the switch to enable it. On Android 4.4 all sensors are enabled by default.
+                                </p>
+                                The <b>Preferences</b> tab in the options menu can be used to select imperial units.
+                                </p>
+                                <p>Note that height measurement (barometer) are calibrated by tapping on the barometer sensor and tapping the calibrate button. The measured height shown is calculated based on the difference in air pressure between the current measurement and the pressure at the moment of calibration. Measurements are always calibrated on connection (but may be re-calibrated at any time).</p>
+    <p class="copy">&copy; 2013-2015 Texas Instruments</p>
+  </div>
+</body>
+</html>
+

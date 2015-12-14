@@ -1,0 +1,386 @@
+<!--
+Texas Instruments Manifest Format 2.0
+-->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+<!-- @Start Style -->
+<!-- Default style in case someone doesnt have Internet Access -->
+<style type="text/css" id="internalStyle">
+	body, div, p {
+		font-family: Lucida Grande, Verdana, Geneva, Arial, sans-serif;
+		font-size: 13px;
+		line-height: 1.3;
+	}
+	body {
+		margin: 20px;	
+	}
+	h1 {
+		font-size: 150%;
+	}
+	h2 {
+		font-size: 120%;
+	}
+	h3 {
+		font-size: 100%;
+	}
+	img {
+		border: 0px;
+		vertical-align: middle;
+	}
+	table, th, td, tr {
+		border: 1px solid black;	
+		font-family: Lucida Grande, Verdana, Geneva, Arial, sans-serif;
+		font-size: 13px;
+		line-height: 1.3;
+		empty-cells: show;  
+		padding: 5px;
+	}
+	table {
+		border-collapse: collapse; 
+		width: 100%;
+	}
+	tr {
+		page-break-inside: avoid;
+	}
+	#TIlogoLeft {
+		background-color: black; 
+		padding: 0;
+		width: 20%;
+	}
+	#TIlogoRight {
+		background-color: red; 
+		padding: 0;
+	}
+	#ProductName {
+		text-align: center;
+	}
+	#ReleaseDate {
+		text-align: center;
+	}
+	.LogoSection {
+		margin: 0;
+		padding: 0;
+	}
+	.HeaderSection {
+		margin: 25px 0 25px 0;
+		padding: 0;
+	}
+	.LegendSection {
+		margin: 25px 0 25px 0;
+	}
+	.ExportSection {
+		margin: 25px 0 25px 0;
+	}
+	.DisclaimerSection {
+		margin: 25px 0 25px 0;	
+	}
+	.CreditSection {
+		margin: 25px 0 25px 0;	
+	}
+	.LicenseSection {
+		margin: 25px 0 25px 0;	
+	}
+	.ManifestTable {
+		margin: 25px 0 25px 0;	
+	}
+</style> 
+<!-- Override style from TI if they have Internet Access -->
+<link type="text/css" rel="stylesheet" href="timanifeststyle.css">
+<!-- @End Style -->
+<title>Texas Instruments Manifest</title>
+</head>
+
+<body><!-- Logo display, will need to fix up the URLs, this is just for testing.. Image alternate display not wporking well yet -->
+<div class="LogoSection">
+<table>
+  <tbody>
+    <tr>
+      <td id="TIlogoLeft">
+        <a href="http://www.ti.com/">
+          <!-- img src="tilogo.gif" alt="Texas Instruments Incorporated" -->
+		  <img alt="" src="data:image/gif;base64,R0lGODlh3gA2AKIAAAAAAP///7u7u29vbz8/PwYGBujo6BgYGCH5BAAAAAAALAAAAADeADYAAAP/CLrc/jDKSau9OOvNu/9gKI5kaZ5oqq5s675wLM90bd94ru987//AoHBILBqPyKRyyWw6n9CodHorDALYLIHKJVqz2q44eAUHtoDB4DBu48rgLQErcNtnX7NhMDcICIB3gix5ZmtqAAZZew8EAo+QkQIDNVZqiIM1cHGKZ4YPAmaiAWw0c1gFmZqjB3SbZ6kNe6WhsAeOlDV0qjSFAXUAp7lwuREFtVsFgMvLB7fNAM+BCs+lDLd8BNYOuxfV22PL0RiWlwO1u3kDqejAEsjR6GB86FsHoYwA6gxWnVgGEegUuIelWJk6jswAGlXQ36J1xBSoQwfulIEDr/6l+VeK/+AehrAGOHRnAWRBbbWegckXAV6wk4AeRQtDQBEaBYsYlMl2hUCsBt0iKgilT9EfAlfO7SmzdKkrkQUT/fqZSECqLCSlntH375IAA1tqGUilLIBSNVnU+NmJNBRVChlF1QwAdlRWBy5P3QymwCLBYhs73cTHYBq3X33nDQ2wcWuBgef0FRD4GK3jU3VCZZUJAIw1OGg0P+4bFiubOWoOsEP1+KvZn3wurDbZ6lfcuw3yYkFjRSeYzRe7ARAbW0K3PmGIMi0OFDG1Mmha+RnufAHn3xL9ha6uTZ/rXagZ1GKAtTsHeWb+FEQvHILuX4+mLzj2j2r4TrFesTwMbE5Cuv8JzbTSGuRV1xgfUJFC3WbA0JWFalcItpgf8YU2yT/qATaedent5cBb8zk0DzIitgfKbonRFV9Wp2xl3UXq5Ccibp05598BnRigiAIJmrZAexkJQIuBwzX4CB3SQbeYQkPVAUco63DI2HzsAdYAiAvEZdYlaVQ5wXs3+bQAjovEUoBRR9LVAFLaPXCcY/KMqVRasQB5kiJgLcYgTkJiuCWKC2ZpIY/z/LRhYefkBAGW1HTyRy2UjObLHxSAOZ948EUVGCSC3SLZbB7iZKOLc2GRRgMH/VhdHnJwFCgD8iEGx0VKvpqbO+hoaCppEg3UiTES1CTkhNaQ+Qs4LQGql07/lET4mIQ6SvTSVGZ9Bmhz/bkYzK+PFKtpje6wumRm1wrLZzSdQASoZvyswdmSuk7p616HfkjBTxZBQucFgqXCFKdn1NpiUlQJhs8kteBWG0AbATbXS2tBlaeoVkmJRova4KkGPmhMFdiSYmq8cbTRYhrlkiHaNufJ9mIgVqEXnAOJM5JE4sgjudQ8bF82x+cKBP4Iiedecyjgx2/WtMNjjhcL9h+S4xq9RYJgsbeeUbmdrPTSQbPccsyijEXOfI8xyuinVJH1wdkS/MQ2Bc5Iq08DyHYwGglvPyCilbz0fa8GLV7r9+Btb7CJ14Qnzg8HpdKoOOF5Py752JNXvrblNphzEHnmnF/a+ecTbA465qKPXnnppkuOeuqKr8465K+z7nrsfc9Ouyq23z5I7rrfwXvvbhSQAAA7" />
+        </a>
+      </td>
+      <td id="TILogoRight">
+        <!-- img src="titagline.gif" alt="Technology for Innovators(tm)"-->
+		<img alt="" src="data:image/gif;base64,R0lGODlhOgEaALMAAP8AAP////92dv+3t/+Njf/W1v/t7f8hIf/19f+jo//Hx/8/P/9cXP/j4//6+v/+/iH5BAAAAAAALAAAAAA6ARoAAAT/EMhJq7046827/2AojmRpnmiqrmzrvnAsz3Rt33iu73zv/8CgcEgsGo/IpHLJbDqft0NDMCBQodis1jcADBKE7nYcCpjPgU5AQBKkVYOHAeRudqtXsh60/vRHdSoBBCGBNAkLe4o4f2psgG8pjR6GM5OLmDB/DA0GBoQADAgICRIBBQUOYgwGCg2kEgudBgUHAIGcBg0MsZ0NCnMGYgsBtqEGAbCynrW3AQONgcIFBgiErK6wAAfUtLbCscWiowoAyLDczLZu0AIJCAYOoJn0G38ObAwPEvLEts/O1vUhsA8AAjGonEmA9W6hGAVpEjiQoKBAhT8HJSRkVyEQQAAJ//a5YeMPQIFyACqCnJjSIgFCB4oB+HOSokWOAB6wIWCxnk8MfYh5QsYg5sVHfQLVMSqhztJIxWIaC6QzJy8KfZgqrNT0zR+nUNl8fSMvZ6IDwJCJRfoI7IR4Cub9nDsha6RwR02xUZpGq1utUWUq9FKgYV6/abgOHjt45tquEgY0SDDHoJg+fxhXolKNrmfH/EoR5EdAKmjQfB1qvPmGIQIJ3g4gC2egVF7LqxtP8Ng2cViTKFUCIGbNFKEEmB/VbDlYdqLRn+du8oTg6jjbmfe+CbTM2+BcuySgbQVtQoOCt7s3U8wbsqGs3ZppZLnylwFe8Uql825ogANPckUnYDoOCogxQGXADajggjcw4AA8DSSyTQASMmjhhTQscBWGHHbo4YcghijiiCSWaOKJKKao4oostugiFBEAADs=" />
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div><div class="HeaderSection">
+<h1 id="ProductName">
+<!-- @Start Product -->
+SensorTag Android app Manifest
+<!-- @End Product -->
+</h1>
+
+<h2 id="ReleaseDate">
+<!-- @Start Date -->
+05-28-2015
+<!-- @End Date -->
+</h2>
+
+
+<h2 id="SRASID">
+<!-- @Start Date -->
+Manifest ID - SRAS00001750
+<!-- @End Date -->
+</h2>
+</div><div class="LegendSection">
+<h2>Legend</h2>
+<p>(explanation of the fields in the Manifest Table below)</p>
+<table>
+<tbody>
+<tr>
+<td>
+<b>Software Name </b>
+</td>
+<td>
+The name of the application or file
+</td>
+</tr>
+<tr>
+<td>
+<b>Version</b>
+</td>
+<td>
+Version of the application or file
+</td>
+</tr>
+<tr>
+<td>
+<b>License Type</b>
+</td>
+<td>
+Type of license(s) under which TI will be providing
+software to the licensee (e.g. BSD-3-Clause, GPL-2.0, TI TSPA License, TI
+Commercial License). The license could be under Commercial terms or Open Source. See Open Source Reference License Disclaimer in
+the Disclaimers Section. Whenever possible, TI will use an <a href="http://spdx.org/licenses/"> SPDX Short Identifier </a> for an Open Source
+License. TI Commercial license terms are not usually included in the manifest and are conveyed through a variety 
+of means such as a clickwrap license upon install, 
+a signed license agreement and so forth.
+</td>
+</tr>
+<tr>
+<td>
+<b>Location</b>
+</td>
+<td>
+The directory name and path on the media or a specific file where the Software is located. Typically fully qualified path names 
+are not used and instead the relevant top level directory of the application is given. 
+A notation often used in the manifests is [as installed]/directory/*. Note that the asterisk implies that all
+files under that directory are licensed as the License Type field denotes. Any exceptions to this will 
+generally be denoted as [as installed]/directory/* except as noted below which means as shown in subsequent rows of 
+the manifest.
+</td>
+</tr>
+<tr>
+<td>
+<b>Delivered As</b>
+</td>
+<td>
+This field will either be &#8220;Source&#8221;, &#8220;Binary&#8221; or &#8220;Source
+and Binary&#8221; and is the primary form the content of the Software is delivered
+in. If the Software is delivered in an archive format, this field
+applies to the contents of the archive. If the word Limited is used
+with Source, as in &#8220;Limited Source&#8221; or &#8220;Limited Source and Binary&#8221; then
+only portions of the Source for the application are provided.
+</td>
+</tr>
+<tr>
+<td>
+<b>Modified by TI</b>
+</td>
+<td>
+This field will either be &#8220;Yes&#8221; or &#8220;No&#8221;. A &#8220;Yes&#8221; means
+TI has made changes to the Software. A &#8220;No&#8221; means TI has not made any
+changes. Note: This field is not applicable for Software &#8220;Obtained
+from&#8221; TI.
+</td>
+</tr>
+<tr>
+<td>
+<b>Obtained from</b>
+</td>
+<td>
+This field specifies from where or from whom TI obtained
+the Software. It may be a URL to an Open Source site, a 3<sup>rd</sup>
+party licensor, or TI. See Links Disclaimer in the Disclaimers
+Section.
+</td>
+</tr>
+</tbody>
+</table>
+</div><div class="DisclaimerSection">
+<h2>Disclaimers</h2>
+<h3>Export Control Classification Number (ECCN)</h3>
+<p>Any use of ECCNs listed in the Manifest is at the user&#8217;s risk
+and without recourse to TI. Your
+company, as the exporter of record, is responsible for determining the
+correct classification of any item at
+the time of export. Any export classification by TI of Software is for
+TI&#8217;s internal use only and shall not be construed as a representation
+or warranty
+regarding the proper export classification for such Software or whether
+an export
+license or other documentation is required for exporting such Software</p>
+<h3>Links in the Manifest</h3>
+<p>Any
+links appearing on this Manifest
+(for example in the &#8220;Obtained from&#8221; field) were verified at the time
+the Manifest was created. TI makes no guarantee that any listed links
+will
+remain active in the future.</p>
+<h3>Open Source License References</h3>
+<p>Your company is responsible for confirming the
+applicable license terms for any open source Software
+listed in this Manifest that was not &#8220;Obtained from&#8221; TI. Any open
+source license
+specified in this Manifest for Software that was
+not &#8220;Obtained from&#8221; TI is for TI&#8217;s internal use only and shall not be
+construed as a representation or warranty regarding the proper open
+source license terms
+for such Software.</p>
+</div><div class="ExportSection">
+<h2>Export Information</h2>
+<p>ECCN for Software included in this release:</p>
+EAR99 (No Other ECCN Applies)
+</div><div class="ManifestTable">
+<!-- h2>Manifest Table</h2 -->
+ 
+ <table> 
+ <tbody> 
+ 
+ <h2> 
+  SensorTag Android app Manifest Table 
+ </h2> 
+ 
+  
+ <p> 
+ 
+ See the Legend above for a description of these columns. 
+ 
+ </p> 
+  
+ <table id="targetpackages" name="targetpackages"> 
+ <thead>  
+ 	<tr> 
+ 		<td><b>Software Name</b></td> 
+ 		<td><b>Version</b></td> 
+ 		<td><b>License Type</b></td> 
+ 		<td><b>Delivered As</b></td> 
+ 		<td><b>Modified by TI</b></td> 
+ 		<td></td> 
+ 		<td></td> 
+ 	</tr> 
+ </thead>  
+ 
+ 
+ <tbody> 
+ 	<tr> 
+ 		<td id="name" name="name" rowspan="2"> 
+ SensorTag Android App 
+ </td> 
+ 		<td id="version" name="version" rowspan="2"> 
+ 2.20 
+ </td> 
+ 		<td id="license" name="license" rowspan="2"> 
+ TI Text File 
+ </td> 
+ 		<td id="delivered" name="delivered" rowspan="2"> 
+ Source 
+ </td> 
+ 		<td id="modified" name="modified" rowspan="2"> 
+ N/A 
+ </td> 
+ 		<td><b>Location</b></td> 
+ 		<td id="location" name="location"> 
+ NA 
+ </td> 
+ 	</tr> 
+ 	<tr> 
+ 		<td><b>Obtained from</b></td> 
+ 		<td id="obtained" name="obtained"> 
+ TI 
+ </td> 
+ 	</tr> 
+ 
+ <tbody> 
+ 	<tr> 
+ 		<td id="name" name="name" rowspan="2"> 
+ Android Package 
+ </td> 
+ 		<td id="version" name="version" rowspan="2"> 
+ 5.01 
+ </td> 
+ 		<td id="license" name="license" rowspan="2"> 
+ Apache-2.0 
+ </td> 
+ 		<td id="delivered" name="delivered" rowspan="2"> 
+ Object 
+ </td> 
+ 		<td id="modified" name="modified" rowspan="2"> 
+ No 
+ </td> 
+ 		<td><b>Location</b></td> 
+ 		<td id="location" name="location"> 
+ NA 
+ </td> 
+ 	</tr> 
+ 	<tr> 
+ 		<td><b>Obtained from</b></td> 
+ 		<td id="obtained" name="obtained"> 
+ http://developer.android.com/about/versions/android-5.1.html 
+ </td> 
+ 	</tr> 
+ 
+ <tbody> 
+ 	<tr> 
+ 		<td id="name" name="name" rowspan="2"> 
+ Paho MQTT Android 
+ </td> 
+ 		<td id="version" name="version" rowspan="2"> 
+ 1.0.2 
+ </td> 
+ 		<td id="license" name="license" rowspan="2"> 
+ EPL-1.0 
+ </td> 
+ 		<td id="delivered" name="delivered" rowspan="2"> 
+ Object 
+ </td> 
+ 		<td id="modified" name="modified" rowspan="2"> 
+ No 
+ </td> 
+ 		<td><b>Location</b></td> 
+ 		<td id="location" name="location"> 
+ [as installed]/   BleSensorTag/libs/*.jar 
+ </td> 
+ 	</tr> 
+ 	<tr> 
+ 		<td><b>Obtained from</b></td> 
+ 		<td id="obtained" name="obtained"> 
+ https://eclipse.org/paho/ 
+ </td> 
+ 	</tr> 
+ 
+ </tbody> 
+ </table> 
+  
+ </p> 
+ </p> 
+ <p> 
+
+</div><div class="CreditSection">
+<h2>Credits</h2>
+<BR> <BR><BR><BR><BR>
+</div><div class="LicenseSection">
+<h2>Licenses</h2>
+<BR><h3><b> SensorTag Android app Licenses </b></h3><BR> <BR><BR><BR>TEXAS INSTRUMENTS TEXT FILE LICENSE<BR><BR><BR>Copyright (c)  2015 Texas Instruments Incorporated<BR><BR>All rights reserved not granted herein.<BR><BR>Limited License.  <BR><BR>Texas Instruments Incorporated grants a world-wide, royalty-free, non-exclusive license under copyrights and patents it now or hereafter owns or controls to make, have made, use, import, offer to sell and sell ("Utilize") this software subject to the terms herein.  With respect to the foregoing patent license, such license is granted  solely to the extent that any such patent is necessary to Utilize the software alone.  The patent license shall not apply to any combinations which include this software, other than combinations with devices manufactured by or for TI (“TI Devices”).  No hardware patent is licensed hereunder.<BR><BR>Redistributions must preserve existing copyright notices and reproduce this license (including the above copyright notice and the disclaimer and (if applicable) source code license limitations below) in the documentation and/or other materials provided with the distribution<BR><BR>Redistribution and use in binary form, without modification, are permitted provided that the following conditions are met:<BR><BR>*	No reverse engineering, decompilation, or disassembly of this software is permitted with respect to any software provided in binary form.<BR><BR>*	any redistribution and use are licensed by TI for use only with TI Devices.<BR><BR>*	Nothing shall obligate TI to provide you with source code for the software licensed and provided to you in object code.<BR><BR>If software source code is provided to you, modification and redistribution of the source code are permitted provided that the following conditions are met:<BR><BR>*	any redistribution and use of the source code, including any resulting derivative works, are licensed by TI for use only with TI Devices.<BR><BR>*	any redistribution and use of any object code compiled from the source code and any resulting derivative works, are licensed by TI for use only with TI Devices.<BR><BR>Neither the name of Texas Instruments Incorporated nor the names of its suppliers may be used to endorse or promote products derived from this software without specific prior written permission.<BR><BR>DISCLAIMER.<BR><BR>THIS SOFTWARE IS PROVIDED BY TI AND TI’S LICENSORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL TI AND TIâ€™S LICENSORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.<BR><BR>><BR>Apache License<BR>                           Version 2.0, January 2004<BR>                        http://www.apache.org/licenses/<BR><BR>   TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION<BR><BR>   1. Definitions.<BR><BR>      "License" shall mean the terms and conditions for use, reproduction,<BR>      and distribution as defined by Sections 1 through 9 of this document.<BR><BR>      "Licensor" shall mean the copyright owner or entity authorized by<BR>      the copyright owner that is granting the License.<BR><BR>      "Legal Entity" shall mean the union of the acting entity and all<BR>      other entities that control, are controlled by, or are under common<BR>      control with that entity. For the purposes of this definition,<BR>      "control" means (i) the power, direct or indirect, to cause the<BR>      direction or management of such entity, whether by contract or<BR>      otherwise, or (ii) ownership of fifty percent (50%) or more of the<BR>      outstanding shares, or (iii) beneficial ownership of such entity.<BR><BR>      "You" (or "Your") shall mean an individual or Legal Entity<BR>      exercising permissions granted by this License.<BR><BR>      "Source" form shall mean the preferred form for making modifications,<BR>      including but not limited to software source code, documentation<BR>      source, and configuration files.<BR><BR>      "Object" form shall mean any form resulting from mechanical<BR>      transformation or translation of a Source form, including but<BR>      not limited to compiled object code, generated documentation,<BR>      and conversions to other media types.<BR><BR>      "Work" shall mean the work of authorship, whether in Source or<BR>      Object form, made available under the License, as indicated by a<BR>      copyright notice that is included in or attached to the work<BR>      (an example is provided in the Appendix below).<BR><BR>      "Derivative Works" shall mean any work, whether in Source or Object<BR>      form, that is based on (or derived from) the Work and for which the<BR>      editorial revisions, annotations, elaborations, or other modifications<BR>      represent, as a whole, an original work of authorship. For the purposes<BR>      of this License, Derivative Works shall not include works that remain<BR>      separable from, or merely link (or bind by name) to the interfaces of,<BR>      the Work and Derivative Works thereof.<BR><BR>      "Contribution" shall mean any work of authorship, including<BR>      the original version of the Work and any modifications or additions<BR>      to that Work or Derivative Works thereof, that is intentionally<BR>      submitted to Licensor for inclusion in the Work by the copyright owner<BR>      or by an individual or Legal Entity authorized to submit on behalf of<BR>      the copyright owner. For the purposes of this definition, "submitted"<BR>      means any form of electronic, verbal, or written communication sent<BR>      to the Licensor or its representatives, including but not limited to<BR>      communication on electronic mailing lists, source code control systems,<BR>      and issue tracking systems that are managed by, or on behalf of, the<BR>      Licensor for the purpose of discussing and improving the Work, but<BR>      excluding communication that is conspicuously marked or otherwise<BR>      designated in writing by the copyright owner as "Not a Contribution."<BR><BR>      "Contributor" shall mean Licensor and any individual or Legal Entity<BR>      on behalf of whom a Contribution has been received by Licensor and<BR>      subsequently incorporated within the Work.<BR><BR>   2. Grant of Copyright License. Subject to the terms and conditions of<BR>      this License, each Contributor hereby grants to You a perpetual,<BR>      worldwide, non-exclusive, no-charge, royalty-free, irrevocable<BR>      copyright license to reproduce, prepare Derivative Works of,<BR>      publicly display, publicly perform, sublicense, and distribute the<BR>      Work and such Derivative Works in Source or Object form.<BR><BR>   3. Grant of Patent License. Subject to the terms and conditions of<BR>      this License, each Contributor hereby grants to You a perpetual,<BR>      worldwide, non-exclusive, no-charge, royalty-free, irrevocable<BR>      (except as stated in this section) patent license to make, have made,<BR>      use, offer to sell, sell, import, and otherwise transfer the Work,<BR>      where such license applies only to those patent claims licensable<BR>      by such Contributor that are necessarily infringed by their<BR>      Contribution(s) alone or by combination of their Contribution(s)<BR>      with the Work to which such Contribution(s) was submitted. If You<BR>      institute patent litigation against any entity (including a<BR>      cross-claim or counterclaim in a lawsuit) alleging that the Work<BR>      or a Contribution incorporated within the Work constitutes direct<BR>      or contributory patent infringement, then any patent licenses<BR>      granted to You under this License for that Work shall terminate<BR>      as of the date such litigation is filed.<BR><BR>   4. Redistribution. You may reproduce and distribute copies of the<BR>      Work or Derivative Works thereof in any medium, with or without<BR>      modifications, and in Source or Object form, provided that You<BR>      meet the following conditions:<BR><BR>      (a) You must give any other recipients of the Work or<BR>          Derivative Works a copy of this License; and<BR><BR>      (b) You must cause any modified files to carry prominent notices<BR>          stating that You changed the files; and<BR><BR>      (c) You must retain, in the Source form of any Derivative Works<BR>          that You distribute, all copyright, patent, trademark, and<BR>          attribution notices from the Source form of the Work,<BR>          excluding those notices that do not pertain to any part of<BR>          the Derivative Works; and<BR><BR>      (d) If the Work includes a "NOTICE" text file as part of its<BR>          distribution, then any Derivative Works that You distribute must<BR>          include a readable copy of the attribution notices contained<BR>          within such NOTICE file, excluding those notices that do not<BR>          pertain to any part of the Derivative Works, in at least one<BR>          of the following places: within a NOTICE text file distributed<BR>          as part of the Derivative Works; within the Source form or<BR>          documentation, if provided along with the Derivative Works; or,<BR>          within a display generated by the Derivative Works, if and<BR>          wherever such third-party notices normally appear. The contents<BR>          of the NOTICE file are for informational purposes only and<BR>          do not modify the License. You may add Your own attribution<BR>          notices within Derivative Works that You distribute, alongside<BR>          or as an addendum to the NOTICE text from the Work, provided<BR>          that such additional attribution notices cannot be construed<BR>          as modifying the License.<BR><BR>      You may add Your own copyright statement to Your modifications and<BR>      may provide additional or different license terms and conditions<BR>      for use, reproduction, or distribution of Your modifications, or<BR>      for any such Derivative Works as a whole, provided Your use,<BR>      reproduction, and distribution of the Work otherwise complies with<BR>      the conditions stated in this License.<BR><BR>   5. Submission of Contributions. Unless You explicitly state otherwise,<BR>      any Contribution intentionally submitted for inclusion in the Work<BR>      by You to the Licensor shall be under the terms and conditions of<BR>      this License, without any additional terms or conditions.<BR>      Notwithstanding the above, nothing herein shall supersede or modify<BR>      the terms of any separate license agreement you may have executed<BR>      with Licensor regarding such Contributions.<BR><BR>   6. Trademarks. This License does not grant permission to use the trade<BR>      names, trademarks, service marks, or product names of the Licensor,<BR>      except as required for reasonable and customary use in describing the<BR>      origin of the Work and reproducing the content of the NOTICE file.<BR><BR>   7. Disclaimer of Warranty. Unless required by applicable law or<BR>      agreed to in writing, Licensor provides the Work (and each<BR>      Contributor provides its Contributions) on an "AS IS" BASIS,<BR>      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or<BR>      implied, including, without limitation, any warranties or conditions<BR>      of TITLE, NON-INFRINGEMENT, MERCHANTABILITY, or FITNESS FOR A<BR>      PARTICULAR PURPOSE. You are solely responsible for determining the<BR>      appropriateness of using or redistributing the Work and assume any<BR>      risks associated with Your exercise of permissions under this License.<BR><BR>   8. Limitation of Liability. In no event and under no legal theory,<BR>      whether in tort (including negligence), contract, or otherwise,<BR>      unless required by applicable law (such as deliberate and grossly<BR>      negligent acts) or agreed to in writing, shall any Contributor be<BR>      liable to You for damages, including any direct, indirect, special,<BR>      incidental, or consequential damages of any character arising as a<BR>      result of this License or out of the use or inability to use the<BR>      Work (including but not limited to damages for loss of goodwill,<BR>      work stoppage, computer failure or malfunction, or any and all<BR>      other commercial damages or losses), even if such Contributor<BR>      has been advised of the possibility of such damages.<BR><BR>   9. Accepting Warranty or Additional Liability. While redistributing<BR>      the Work or Derivative Works thereof, You may choose to offer,<BR>      and charge a fee for, acceptance of support, warranty, indemnity,<BR>      or other liability obligations and/or rights consistent with this<BR>      License. However, in accepting such obligations, You may act only<BR>      on Your own behalf and on Your sole responsibility, not on behalf<BR>      of any other Contributor, and only if You agree to indemnify,<BR>      defend, and hold each Contributor harmless for any liability<BR>      incurred by, or claims asserted against, such Contributor by reason<BR>      of your accepting any such warranty or additional liability.<BR><BR>   END OF TERMS AND CONDITIONS<BR><BR>   APPENDIX: How to apply the Apache License to your work.<BR><BR>      To apply the Apache License to your work, attach the following<BR>      boilerplate notice, with the fields enclosed by brackets "[]"<BR>      replaced with your own identifying information. (Don't include<BR>      the brackets!)  The text should be enclosed in the appropriate<BR>      comment syntax for the file format. We also recommend that a<BR>      file or class name and description of purpose be included on the<BR>      same "printed page" as the copyright notice for easier<BR>      identification within third-party archives.<BR><BR>   Copyright [yyyy] [name of copyright owner]<BR>	<BR>   Licensed under the Apache License, Version 2.0 (the "License");<BR>   you may not use this file except in compliance with the License.<BR>   You may obtain a copy of the License at<BR><BR>       http://www.apache.org/licenses/LICENSE-2.0<BR><BR>   Unless required by applicable law or agreed to in writing, software<BR>   distributed under the License is distributed on an "AS IS" BASIS,<BR>   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.<BR>   See the License for the specific language governing permissions and<BR>   limitations under the License.<BR><BR><BR><BR><BR>Eclipse Public License - v 1.0<BR><BR>THE ACCOMPANYING PROGRAM IS PROVIDED UNDER THE TERMS OF THIS ECLIPSE PUBLIC LICENSE ("AGREEMENT"). ANY USE, REPRODUCTION OR DISTRIBUTION OF THE PROGRAM CONSTITUTES RECIPIENT'S ACCEPTANCE OF THIS AGREEMENT.<BR><BR>1. DEFINITIONS<BR><BR>"Contribution" means:<BR><BR>a) in the case of the initial Contributor, the initial code and documentation distributed under this Agreement, and<BR>b) in the case of each subsequent Contributor:<BR><BR>i) changes to the Program, and<BR><BR>ii) additions to the Program;<BR><BR>where such changes and/or additions to the Program originate from and are distributed by that particular Contributor. A Contribution 'originates' from a Contributor if it was added to the Program by such Contributor itself or anyone acting on such Contributor's behalf. Contributions do not include additions to the Program which: (i) are separate modules of software distributed in conjunction with the Program under their own license agreement, and (ii) are not derivative works of the Program.<BR><BR>"Contributor" means any person or entity that distributes the Program.<BR><BR>"Licensed Patents " mean patent claims licensable by a Contributor which are necessarily infringed by the use or sale of its Contribution alone or when combined with the Program.<BR><BR>"Program" means the Contributions distributed in accordance with this Agreement.<BR><BR>"Recipient" means anyone who receives the Program under this Agreement, including all Contributors.<BR><BR>2. GRANT OF RIGHTS<BR><BR>a) Subject to the terms of this Agreement, each Contributor hereby grants Recipient a non-exclusive, worldwide, royalty-free copyright license to reproduce, prepare derivative works of, publicly display, publicly perform, distribute and sublicense the Contribution of such Contributor, if any, and such derivative works, in source code and object code form.<BR><BR>b) Subject to the terms of this Agreement, each Contributor hereby grants Recipient a non-exclusive, worldwide, royalty-free patent license under Licensed Patents to make, use, sell, offer to sell, import and otherwise transfer the Contribution of such Contributor, if any, in source code and object code form. This patent license shall apply to the combination of the Contribution and the Program if, at the time the Contribution is added by the Contributor, such addition of the Contribution causes such combination to be covered by the Licensed Patents. The patent license shall not apply to any other combinations which include the Contribution. No hardware per se is licensed hereunder.<BR><BR>c) Recipient understands that although each Contributor grants the licenses to its Contributions set forth herein, no assurances are provided by any Contributor that the Program does not infringe the patent or other intellectual property rights of any other entity. Each Contributor disclaims any liability to Recipient for claims brought by any other entity based on infringement of intellectual property rights or otherwise. As a condition to exercising the rights and licenses granted hereunder, each Recipient hereby assumes sole responsibility to secure any other intellectual property rights needed, if any. For example, if a third party patent license is required to allow Recipient to distribute the Program, it is Recipient's responsibility to acquire that license before distributing the Program.<BR><BR>d) Each Contributor represents that to its knowledge it has sufficient copyright rights in its Contribution, if any, to grant the copyright license set forth in this Agreement.<BR><BR>3. REQUIREMENTS<BR><BR>A Contributor may choose to distribute the Program in object code form under its own license agreement, provided that:<BR><BR>a) it complies with the terms and conditions of this Agreement; and<BR><BR>b) its license agreement:<BR><BR>i) effectively disclaims on behalf of all Contributors all warranties and conditions, express and implied, including warranties or conditions of title and non-infringement, and implied warranties or conditions of merchantability and fitness for a particular purpose;<BR><BR>ii) effectively excludes on behalf of all Contributors all liability for damages, including direct, indirect, special, incidental and consequential damages, such as lost profits;<BR><BR>iii) states that any provisions which differ from this Agreement are offered by that Contributor alone and not by any other party; and<BR><BR>iv) states that source code for the Program is available from such Contributor, and informs licensees how to obtain it in a reasonable manner on or through a medium customarily used for software exchange.<BR><BR>When the Program is made available in source code form:<BR><BR>a) it must be made available under this Agreement; and<BR><BR>b) a copy of this Agreement must be included with each copy of the Program.<BR><BR>Contributors may not remove or alter any copyright notices contained within the Program.<BR><BR>Each Contributor must identify itself as the originator of its Contribution, if any, in a manner that reasonably allows subsequent Recipients to identify the originator of the Contribution.<BR><BR>4. COMMERCIAL DISTRIBUTION<BR><BR>Commercial distributors of software may accept certain responsibilities with respect to end users, business partners and the like. While this license is intended to facilitate the commercial use of the Program, the Contributor who includes the Program in a commercial product offering should do so in a manner which does not create potential liability for other Contributors. Therefore, if a Contributor includes the Program in a commercial product offering, such Contributor ("Commercial Contributor") hereby agrees to defend and indemnify every other Contributor ("Indemnified Contributor") against any losses, damages and costs (collectively "Losses") arising from claims, lawsuits and other legal actions brought by a third party against the Indemnified Contributor to the extent caused by the acts or omissions of such Commercial Contributor in connection with its distribution of the Program in a commercial product offering. The obligations in this section do not apply to any claims or Losses relating to any actual or alleged intellectual property infringement. In order to qualify, an Indemnified Contributor must: a) promptly notify the Commercial Contributor in writing of such claim, and b) allow the Commercial Contributor to control, and cooperate with the Commercial Contributor in, the defense and any related settlement negotiations. The Indemnified Contributor may participate in any such claim at its own expense.<BR><BR>For example, a Contributor might include the Program in a commercial product offering, Product X. That Contributor is then a Commercial Contributor. If that Commercial Contributor then makes performance claims, or offers warranties related to Product X, those performance claims and warranties are such Commercial Contributor's responsibility alone. Under this section, the Commercial Contributor would have to defend claims against the other Contributors related to those performance claims and warranties, and if a court requires any other Contributor to pay any damages as a result, the Commercial Contributor must pay those damages.<BR><BR>5. NO WARRANTY<BR><BR>EXCEPT AS EXPRESSLY SET FORTH IN THIS AGREEMENT, THE PROGRAM IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED INCLUDING, WITHOUT LIMITATION, ANY WARRANTIES OR CONDITIONS OF TITLE, NON-INFRINGEMENT, MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE. Each Recipient is solely responsible for determining the appropriateness of using and distributing the Program and assumes all risks associated with its exercise of rights under this Agreement , including but not limited to the risks and costs of program errors, compliance with applicable laws, damage to or loss of data, programs or equipment, and unavailability or interruption of operations.<BR><BR>6. DISCLAIMER OF LIABILITY<BR><BR>EXCEPT AS EXPRESSLY SET FORTH IN THIS AGREEMENT, NEITHER RECIPIENT NOR ANY CONTRIBUTORS SHALL HAVE ANY LIABILITY FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING WITHOUT LIMITATION LOST PROFITS), HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OR DISTRIBUTION OF THE PROGRAM OR THE EXERCISE OF ANY RIGHTS GRANTED HEREUNDER, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.<BR><BR>7. GENERAL<BR><BR>If any provision of this Agreement is invalid or unenforceable under applicable law, it shall not affect the validity or enforceability of the remainder of the terms of this Agreement, and without further action by the parties hereto, such provision shall be reformed to the minimum extent necessary to make such provision valid and enforceable.<BR><BR>If Recipient institutes patent litigation against any entity (including a cross-claim or counterclaim in a lawsuit) alleging that the Program itself (excluding combinations of the Program with other software or hardware) infringes such Recipient's patent(s), then such Recipient's rights granted under Section 2(b) shall terminate as of the date such litigation is filed.<BR><BR>All Recipient's rights under this Agreement shall terminate if it fails to comply with any of the material terms or conditions of this Agreement and does not cure such failure in a reasonable period of time after becoming aware of such noncompliance. If all Recipient's rights under this Agreement terminate, Recipient agrees to cease use and distribution of the Program as soon as reasonably practicable. However, Recipient's obligations under this Agreement and any licenses granted by Recipient relating to the Program shall continue and survive.<BR><BR>Everyone is permitted to copy and distribute copies of this Agreement, but in order to avoid inconsistency the Agreement is copyrighted and may only be modified in the following manner. The Agreement Steward reserves the right to publish new versions (including revisions) of this Agreement from time to time. No one other than the Agreement Steward has the right to modify this Agreement. The Eclipse Foundation is the initial Agreement Steward. The Eclipse Foundation may assign the responsibility to serve as the Agreement Steward to a suitable separate entity. Each new version of the Agreement will be given a distinguishing version number. The Program (including Contributions) may always be distributed subject to the version of the Agreement under which it was received. In addition, after a new version of the Agreement is published, Contributor may elect to distribute the Program (including its Contributions) under the new version. Except as expressly stated in Sections 2(a) and 2(b) above, Recipient receives no rights or licenses to the intellectual property of any Contributor under this Agreement, whether expressly, by implication, estoppel or otherwise. All rights in the Program not expressly granted under this Agreement are reserved.<BR><BR>This Agreement is governed by the laws of the State of New York and the intellectual property laws of the United States of America. No party to this Agreement will bring a legal action under this Agreement more than one year after the cause of action arose. Each party waives its rights to a jury trial in any resulting litigation.<BR><BR><BR><BR><BR>
+</div>
+
+</body></html>
